@@ -111,6 +111,15 @@ namespace Sitecore.Support.Cintel
         predicateExpression = c => c.Personal().FirstName == text;
         predicateExpression = predicateExpression.Or(c => c.Personal().LastName == text);
         predicateExpression = predicateExpression.Or(c => c.Emails().PreferredEmail.SmtpAddress == text);
+        #region Added code
+        //fix - check if text contains either first or last name
+        var names = text.Split(' ');
+        foreach (var name in names)
+        {
+          predicateExpression = predicateExpression.Or((Contact c) => c.Personal().FirstName == name);
+          predicateExpression = predicateExpression.Or((Contact c) => c.Personal().LastName == name);
+        }
+        #endregion 
         query = query.Where(predicateExpression);
       }
 
